@@ -128,9 +128,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Akinator.cpp" />
+    <ClCompile Include="Exceptions.cpp" />
     <ClCompile Include="GuessingSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Exceptions.h" />
     <ClInclude Include="GuessingSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

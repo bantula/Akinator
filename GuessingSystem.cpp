@@ -1,4 +1,5 @@
 #include "GuessingSystem.h"
+#include "Exceptions.h"
 
 
 void GuessingSystem::openTerminal()
@@ -21,51 +22,35 @@ void GuessingSystem::openTerminal()
 
 	while (opcija != "EXIT") {
 		if (opcija == "LOAD") {
-			load();
+			try {
+				load();
+			}
+			catch (FileOpenException* e) {
+				cout << e->what() << endl;
+			}
 		}
-		else if (opcija == "GUESS") {
-			if (!sviOdgovori.empty()) {
+		else if(sviOdgovori.empty() == false){
+			if (opcija == "GUESS") {
+
 				guess(-1);
 			}
-			else {
-				cout << "Niste ucitali fajl" << endl;	
-			}
-			
-		}
-		else if (opcija == "NEW") {
-			if (!sviOdgovori.empty()) {
+			else if (opcija == "NEW") {
 				newPerson();
 			}
-			else {
-				cout << "Niste ucitali fajl" << endl;
-			}
-
-		}
-		else if (opcija == "TRY") {
-			if (!sviOdgovori.empty()) {
+			else if (opcija == "TRY") {
 				cout << "Unesite broj pokusaja: " << endl;
 				int brojPokusaja;
 				cin >> brojPokusaja;
 				guess(brojPokusaja);
 			}
-			else {
-				cout << "Niste ucitali fajl" << endl;
-			}
-		}
-		else if (opcija == "INFO") {
-			if (!sviOdgovori.empty()) {
+			else if (opcija == "INFO") {
 				cout << "Unesite ime: " << endl;
 				stampajImena();
 				string ime;
 				cin >> ime;
 				info(ime);
 			}
-			else {
-				cout << "Niste ucitali fajl" << endl;
-			}
-		}
-		else if (opcija == "DELETE") {
-			if (!sviOdgovori.empty()) {
+			else if (opcija == "DELETE") {
 				cout << "Unesite koga zelite da izbrisete: " << endl;
 				stampajImena();
 				string ime;
@@ -74,13 +59,13 @@ void GuessingSystem::openTerminal()
 				stampajSveOdgovore();
 			}
 			else {
-				cout << "Niste ucitali fajl" << endl;
+				cout << "Nevalidna opcija, probajte opet" << endl;
 			}
-
 		}
 		else {
-			cout << "Nevalidna opcija, probajte opet" << endl;
+			cout << "Niste ucitali fajl" << endl;
 		}
+		
 		cout << "Sta zelite da uradim?" << endl;
 		cin >> opcija;
 	}
@@ -97,11 +82,8 @@ void GuessingSystem::load()
 	cin >> putanja;
 	ifstream fajl(putanja);
 
-	//Ovde dodaj izuzetkeee
-
 	if (!fajl.is_open()) {
-		cerr << "Error opening file: " << putanja << endl;
-		return; // Return an error code, mozda izuzetak
+		throw new FileOpenException();
 	}
 
 	bool daLiJePrvaLinija = true;
